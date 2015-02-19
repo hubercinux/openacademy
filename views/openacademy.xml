@@ -39,6 +39,12 @@
 				<search>
 					<field name="name"/>
 					<field name="description"/>
+					<!-- filtra los cursos en la que el usuario actual es responsable -->
+					<filter name="my_courses" string="My Courses" domain="[('responsible_id', '=', uid)]"/>
+					<!-- agrupa los cursos por responsable -->
+					<group string="Group By">
+						<filter name="by_responsible" string="Responsible" context="{'group_by': 'responsible_id'}"/>
+					</group>
 				</search>
 			</field>
 		</record>
@@ -60,6 +66,8 @@
 			<field name="res_model">openacademy.course</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
+			<!-- hace que my_courses sea el filtro por defecto -->
+			<field name="context" eval="{'search_default_my_courses': 1}"/>
 			<field name="help" type="html">
 				<p class="oe_view_nocontent_create">Create the first course</p>
 			</field>
