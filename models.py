@@ -58,6 +58,8 @@ class session(models.Model):
 
 	hours = fields.Float(string="Duration in hours", compute='_get_hours', inverse='_set_hours')
 
+	attendees_count = fields.Integer(string="Attendees count", compute='_get_attendees_count', store=True)
+
 	@api.one #reemplaza el uso del bucle en el metodo
 	@api.depends('seats', 'attendee_ids')
 	def _taken_seats(self):
@@ -115,6 +117,12 @@ class session(models.Model):
 	@api.one
 	def _set_hours(self):
 		self.duration = self.hours / 24
+
+	#desarrollando el método del campo computado attendees_count
+	@api.one
+	@api.depends('attendee_ids')
+	def _get_attendees_count(self):
+		self.attendees_count = len(self.attendee_ids)
 
 	#agregando python constrains (restricciones)
 	#un instructor no puede ser un asistente de su propia clase
