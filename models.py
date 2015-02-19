@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import timedelta
 from openerp import models, fields, api, exceptions
 
 class course(models.Model):
@@ -53,6 +54,7 @@ class session(models.Model):
 	attendee_ids = fields.Many2many('res.partner', string="Attendees")
 
 	taken_seats = fields.Float(string="Taken Seats", compute='_taken_seats')
+	end_date = fields.Date(string="End Date", store=True, compute='_get_end_date', inverse='_set_end_date')
 
 	@api.one #reemplaza el uso del bucle en el metodo
 	@api.depends('seats', 'attendee_ids')
@@ -78,6 +80,30 @@ class session(models.Model):
 					'message': "Increase seats or remove excess attendees",
 				},
 			}
+	#Desarrollando los métodos del campo end_date computado
+	@api.one
+	@api.depends('start_date', 'duration')
+	def _get_end_date(self):
+		if not (self.start_date and self.duration):
+			self.end_date = self.start_date
+			return
+		#lunes + 5 días de duarción del curso es sabado, necesitamos que sea viernes.
+		#entonces le quitamos 1 segundo al tiempo de duración.
+		start = fields.Datetime.from_string(self.start_date)
+		duration = timedelta(days=self.duration, seconds=-1)
+		self.end_date = start + duration
+
+	@api.one
+	def _set_end_date(self):
+		if not (self.start_date and self.end_date):
+			return
+
+		#viernes - lunes = 4 dias, pero debe ser 5 dias el tiempo de duración
+		#le agregamos un día al resultado para obtener la duración del curso
+		start_date = fields.Datetime.from_string(self.start_date)
+		end_date = fields.Datetime.from_string(self.end_date)
+		self.duration = (end_date - start_date).days + 1
+
 	#agregando python constrains (restricciones)
 	#un instructor no puede ser un asistente de su propia clase
 	@api.one
