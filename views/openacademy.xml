@@ -100,9 +100,11 @@
 			<field name="name">session.tree</field>
 			<field name="model">openacademy.session</field>
 			<field name="arch" type="xml">
-				<tree string="Session Tree">
+				<!-- colorea de azul si la duracion del curso es menor a 5 dias y rojo si es mayor a 15 dias -->
+				<tree string="Session Tree" colors="#0000ff:duration&lt;5;red:duration&gt;15">
 					<field name="name"/>
 					<field name="course_id"/>
+					<field name="duration" invisible="1"/>
 					<field name="taken_seats" widget="progressbar"/>
 				</tree>
 			</field>
