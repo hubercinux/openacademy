@@ -56,6 +56,8 @@ class session(models.Model):
 	taken_seats = fields.Float(string="Taken Seats", compute='_taken_seats')
 	end_date = fields.Date(string="End Date", store=True, compute='_get_end_date', inverse='_set_end_date')
 
+	hours = fields.Float(string="Duration in hours", compute='_get_hours', inverse='_set_hours')
+
 	@api.one #reemplaza el uso del bucle en el metodo
 	@api.depends('seats', 'attendee_ids')
 	def _taken_seats(self):
@@ -103,6 +105,16 @@ class session(models.Model):
 		start_date = fields.Datetime.from_string(self.start_date)
 		end_date = fields.Datetime.from_string(self.end_date)
 		self.duration = (end_date - start_date).days + 1
+
+	#Desarrollando los métodos del campo hours computado
+	@api.one
+	@api.depends('duration')
+	def _get_hours(self):
+		self.hours = self.duration * 24
+
+	@api.one
+	def _set_hours(self):
+		self.duration = self.hours / 24
 
 	#agregando python constrains (restricciones)
 	#un instructor no puede ser un asistente de su propia clase

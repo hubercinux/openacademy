@@ -60,7 +60,7 @@
 			</field>
 		</record>
 
-		 <!-- window action -->
+		<!-- window action -->
 		<record model="ir.actions.act_window" id="course_list_action">
 			<field name="name">Courses</field>
 			<field name="res_model">openacademy.course</field>
@@ -129,11 +129,24 @@
 			</field>
 		</record>
 
+		<!-- vista Gantt -->
+		<record model="ir.ui.view" id="session_gantt_view">
+			<field name="name">session.gantt</field>
+			<field name="model">openacademy.session</field>
+			<field name="arch" type="xml">
+				<gantt string="Session Gant" color="course_id" date_start="start_date" date_delay="hours">
+					<level object="res.partner" link="instructor_id">
+						<field name="name"/>
+					</level>
+				</gantt>
+			</field>
+		</record>
+
 		<record model="ir.actions.act_window" id="session_list_action">
 			<field name="name">Sessions</field>
 			<field name="res_model">openacademy.session</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">tree,form,calendar</field>
+			<field name="view_mode">tree,form,calendar,gantt</field>
 		</record>
 
 		<menuitem id="session_menu" name="Sessions" parent="openacademy_menu" action="session_list_action"/>
