@@ -52,5 +52,12 @@
 			<field name="act_to" ref="done"/>
 			<field name="signal">done</field>
 		</record>
+
+		<!-- Pasa a confirmado cuando se supera el 50% de los asientos reservados -->
+		<record model="workflow.transition" id="session_auto_confirm_half_filled">
+			<field name="act_from" ref="draft"/>
+			<field name="act_to" ref="confirmed"/>
+			<field name="condition">taken_seats &gt; 50</field>
+		</record>
 	</data>
 </openerp>
