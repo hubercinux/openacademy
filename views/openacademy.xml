@@ -216,7 +216,7 @@
 			<field name="arch" type="xml">
 				<form string="Add Attendees">
 					<group>
-						<field name="session_id"/>
+						<field name="session_ids"/>
 						<field name="attendee_ids"/>
 					</group>
 					<!-- agregando el botón para el wizard -->
@@ -229,9 +229,12 @@
 			</field>
 		</record>
 
+		<!-- aparece la opcion Add Attendees en Mas al seleccionar una sesion en la vista arbol -->
 		<act_window id="launch_session_wizard" name="Add Attendees" src_model="openacademy.session" res_model="openacademy.wizard" view_mode="form" target="new" key2="client_action_multi"/>
 
-		<menuitem id="session_wizard_menu" name="Registro de asistentes" parent="openacademy_menu" action="launch_session_wizard"/>
+		
+		<!-- no es necesario porque el wizard se usa cuando estando en la vista arbol se selecciona un curso y en Mas veremos la opcion Add attendees definido en act_window anterior -->
+		<!--<menuitem id="session_wizard_menu" name="Registro de asistentes" parent="openacademy_menu" action="launch_session_wizard"/>-->
 
 	</data>
 </openerp>
