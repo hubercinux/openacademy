@@ -9,6 +9,8 @@
 					<!--<t t-call="report.external_layout">-->
 						<div class="page">
 							<h2 t-field="doc.name"/>
+							<p> Instructor: <span t-field="doc.instructor_id"/> </p>
+							<p> Phone: <span t-field="doc.instructor_id.phone"/> </p>
 							<p>From <span t-field="doc.start_date"/> to <span t-field="doc.end_date"/></p>
 							<h3>Attendees:</h3>
 							<ul>
@@ -16,6 +18,12 @@
 									<li><span t-field="attendee.name"/></li>
 								</t>
 							</ul>
+							<t t-set="attendess_count" t-value="doc.run_sql('SELECT name FROM openacademy_session WHERE id IN (%s)')"/>
+							<p > Attendees Count: <span t-esc="attendess_count" /> </p>
+							<t t-set="attendess_count1" t-value="doc.run_sql1()"/>
+							<p > Attendees Count1: <span t-esc="attendess_count1" /> </p>
+							<t t-set="attendess_count2" t-value="doc.run_sql2()"/>
+							<p > Attendees Count2: <span t-esc="attendess_count2" /> </p>
 						</div>
 					<!--</t>-->
 				</t>

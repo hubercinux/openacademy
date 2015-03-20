@@ -150,7 +150,24 @@ class session(models.Model):
 	def _check_instructor_not_in_attendees(self):
 		if self.instructor_id and self.instructor_id in self.attendee_ids:
 			raise exceptions.ValidationError(_("A session's instructor can't be an attendee"))
-			
+    
+	def run_sql(self, qry):
+		self._cr.execute(qry, (self.id,))
+		res = self._cr.dictfetchall()
+		return res[0]['name']
+
+	def run_sql1(self):
+		query = "SELECT name FROM openacademy_session WHERE id IN (%s)"
+		self._cr.execute(query, (self.id,))
+		return [row[0].encode("utf-8") for row in self._cr.fetchall()]
+
+	def run_sql2(self):
+		query = "SELECT right(name, 6) AS name FROM openacademy_session WHERE id IN (%s)"
+		self._cr.execute(query, (self.id,))
+		res = self._cr.dictfetchall()
+		return res[0]['name']
+		#return _res
+
 # class openacademy(models.Model):
 #     _name = 'openacademy.openacademy'
 
